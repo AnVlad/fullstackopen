@@ -5,7 +5,9 @@ function FilterNumbers({ persons, setNumbers }) {
 
   const handleChange = (event) => {
     setNewName(event.target.value);
-    let newListOfPersons = persons.filter((name) => name.name.includes(event.target.value));
+    let newListOfPersons = persons.filter((name) =>
+      name.name.toLowerCase().includes(event.target.value.toLowerCase()),
+    );
     setNumbers(newListOfPersons);
   };
 
