@@ -1,23 +1,48 @@
 import React, { useState } from 'react';
+import personsAPI from './services/personsAPI';
 
-function AddNewNumber({ persons, setPersons }) {
+function AddNewNumber({ persons, setPersons, setShowNotification }) {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
 
-  const isNameExist = (givenName) => {
-    let findDuplicate = persons.find(({ name }) => {
-      return name === givenName;
-    });
+  const handleNotification = (name, action) => {
+    setShowNotification(`${name} has been ${action}`);
+  };
 
-    return findDuplicate ? true : false;
+  const isNameExist = () => {
+    return !!persons.find(({ name }) => name === newName);
+  };
+
+  const changeTheNumber = () => {
+    let confirm = window.confirm(
+      `${newName} is already added to phonebook, replace the old number with a new one?`,
+    );
+
+    if (confirm) {
+      let id = persons.find(({ name }) => name === newName).id;
+
+      const newObject = { name: newName, number: newNumber };
+
+      personsAPI
+        .changeNumber(id, newObject)
+        .then((response) =>
+          setPersons([...persons.filter((person) => person.id !== id), response.data]),
+        );
+      handleNotification(newName, 'changed');
+    }
+  };
+
+  const handleAddPNumber = () => {
+    const newObject = { name: newName, number: newNumber };
+
+    personsAPI.createNumber(newObject).then((response) => setPersons([...persons, response.data]));
+    handleNotification(newName, 'added');
   };
 
   const addNewName = (event) => {
     event.preventDefault();
 
-    isNameExist(newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : setPersons([...persons, { name: newName, number: newNumber, id: persons.length + 1 }]);
+    isNameExist() ? changeTheNumber() : handleAddPNumber();
     setNewName('');
     setNewNumber('');
   };
