@@ -38,6 +38,7 @@ const App = () => {
         persons={persons}
         setPersons={setPersons}
         setShowNotification={setShowNotification}
+        setShowError={setShowError}
       />
 
       <h2>Numbers</h2>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import personsAPI from './services/personsAPI';
 
-function AddNewNumber({ persons, setPersons, setShowNotification }) {
+function AddNewNumber({ persons, setPersons, setShowNotification, setShowError }) {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
 
@@ -25,18 +25,26 @@ function AddNewNumber({ persons, setPersons, setShowNotification }) {
 
       personsAPI
         .changeNumber(id, newObject)
-        .then((response) =>
-          setPersons([...persons.filter((person) => person.id !== id), response.data]),
-        );
-      handleNotification(newName, 'changed');
+        .then((response) => {
+          setPersons([...persons.filter((person) => person.id !== id), response.data]);
+          handleNotification(newName, 'changed');
+        })
+        .catch((error) => console.log(error));
     }
   };
 
   const handleAddPNumber = () => {
     const newObject = { name: newName, number: newNumber };
 
-    personsAPI.createNumber(newObject).then((response) => setPersons([...persons, response.data]));
-    handleNotification(newName, 'added');
+    personsAPI
+      .createNumber(newObject)
+      .then((response) => {
+        setPersons([...persons, response.data]);
+        handleNotification(newName, 'added');
+      })
+      .catch((error) => {
+        setShowError(error.response.data.error);
+      });
   };
 
   const addNewName = (event) => {
