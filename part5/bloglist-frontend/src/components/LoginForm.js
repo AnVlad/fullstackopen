@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blogService from '../services/blogs';
 
-function LoginForm({ user, setUser, setError }) {
+function LoginForm({ setUser, setError }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 

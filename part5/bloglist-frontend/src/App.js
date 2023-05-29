@@ -16,9 +16,17 @@ const App = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    async function fetchedData() {
+      const response = await blogService.getAll();
+      const sortedList = response.sort((a, b) => b.likes - a.likes);
+
+      setBlogs(sortedList);
+    }
+    fetchedData();
 
     const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+    console.log(loggedUser);
+
     if (loggedUser) {
       setUser(loggedUser.name);
       blogService.setToken(loggedUser.token);
@@ -29,7 +37,13 @@ const App = () => {
     return (
       <>
         <LogoutForm user={user} setUser={setUser} />
-        <CreateNewBlogs setError={setError} setNotification={setNotification} />
+        <CreateNewBlogs
+          setError={setError}
+          setNotification={setNotification}
+          blogs={blogs}
+          setBlogs={setBlogs}
+          user={user}
+        />
       </>
     );
   };
@@ -46,7 +60,7 @@ const App = () => {
       <h2>blogs</h2>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} />
       ))}
     </div>
   );
