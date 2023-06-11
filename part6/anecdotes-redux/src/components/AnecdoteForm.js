@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { create } from "../reducers/anecdoteReducer";
+import { createNewAnecdote } from "../reducers/anecdoteReducer";
 import {
   closeNotification,
   setNotification,
@@ -10,10 +10,11 @@ import {
 function AnecdoteForm() {
   const dispatch = useDispatch();
 
-  const createNewAnecdote = (event) => {
+  const createAnecdote = async (event) => {
     event.preventDefault();
     const content = event.target.anecdote.value;
-    dispatch(create(content));
+
+    dispatch(createNewAnecdote(content));
     event.target.anecdote.value = "";
 
     dispatch(setNotification(`you've created ${content}`));
@@ -24,7 +25,7 @@ function AnecdoteForm() {
   return (
     <>
       <h2>create new</h2>
-      <form onSubmit={createNewAnecdote}>
+      <form onSubmit={createAnecdote}>
         <div>
           <input name="anecdote" />
         </div>

@@ -24,3 +24,11 @@ const notificationSlice = createSlice({
 export const { setNotification, showNotification, closeNotification } =
   notificationSlice.actions;
 export default notificationSlice.reducer;
+
+export const setNotification2 = (text, time) => {
+  return async (dispatch) => {
+    dispatch(setNotification(text));
+    dispatch(showNotification());
+    setTimeout(() => dispatch(closeNotification()), time);
+  };
+};

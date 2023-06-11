@@ -6,16 +6,20 @@ const Notification = () => {
     (state) => state.notification.showNotification
   );
 
-  console.log("not", notification);
-
   const style = {
     border: "solid",
     padding: 10,
     borderWidth: 1,
   };
 
+  const style2 = {
+    height: 60,
+  };
+
   return (
-    <div>{showNotification && <div style={style}>{notification}</div>}</div>
+    <div style={style2}>
+      {showNotification && <div style={style}>{notification}</div>}
+    </div>
   );
 };
 
