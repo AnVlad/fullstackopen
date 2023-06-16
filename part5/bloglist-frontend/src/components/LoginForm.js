@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blogService from '../services/blogs';
 
-function LoginForm({ setUser, setError }) {
+function LoginForm({ setUpdateList, setError }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -9,13 +9,18 @@ function LoginForm({ setUser, setError }) {
     event.preventDefault();
 
     try {
-      const response = await blogService.login({ username: username, password: password });
+      const response = await blogService.login({
+        username: username,
+        password: password,
+      });
+
       console.log(response);
-      setUser(response.name);
       setUsername('');
       setPassword('');
 
       window.localStorage.setItem('loggedUser', JSON.stringify(response));
+
+      setUpdateList((prevState) => !prevState);
     } catch (exception) {
       setError('wrong username or password');
     }
@@ -26,22 +31,24 @@ function LoginForm({ setUser, setError }) {
       <div>
         username:
         <input
-          type="text"
+          id='username-input'
+          type='text'
           value={username}
-          name="Username"
+          name='Username'
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
         password:
         <input
-          type="text"
+          id='password-input'
+          type='text'
           value={password}
-          name="Password"
+          name='Password'
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit" onClick={handleLogIn}>
+      <button id='logIn' type='submit' onClick={handleLogIn}>
         Log in
       </button>
     </>

@@ -12,11 +12,14 @@ const middleware = require('./utils/middleware');
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
 const userLogin = require('./controllers/login');
+const testingRouter = require('./controllers/testing');
 
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body);
 });
-app.use(morgan(':method :url :status :res[content-length] :response-time :data'));
+app.use(
+  morgan(':method :url :status :res[content-length] :response-time :data')
+);
 
 mongoose.connect(mongoUrl);
 
@@ -28,6 +31,10 @@ app.use(middleware.tokenExtractor);
 app.use('/api/blogs', middleware.userExtractor, blogsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', userLogin);
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter);
+}
 
 app.use(middleware.errorHandler);
 

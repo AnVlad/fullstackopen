@@ -5,14 +5,16 @@ function LogoutForm({ user, setUser }) {
     event.preventDefault();
 
     window.localStorage.removeItem('loggedUser');
-    setUser(null);
+    setUser({});
   };
 
   return (
     <>
-      {`${user} is logged in`}
+      {`${user.user} is logged in`}
       <div>
-        <button onClick={clickHandle}>Log out</button>
+        <button id='logOut' onClick={clickHandle}>
+          Log out
+        </button>
       </div>
     </>
   );

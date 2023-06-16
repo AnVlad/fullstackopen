@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import blogService from '../services/blogs';
 
-function CreateNewBlogs({ setError, setNotification, blogs, setBlogs, user }) {
+function CreateNewBlogs({ createBlog }) {
   const [showForm, setShowForm] = useState(false);
 
   const displayWhenTrue = { display: showForm ? '' : 'none' };
@@ -12,48 +11,67 @@ function CreateNewBlogs({ setError, setNotification, blogs, setBlogs, user }) {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  const handleSubmit = async (event) => {
+  const newBlog = {
+    title: title,
+    author: author,
+    url: url,
+  };
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-
-    try {
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url,
-      };
-
-      const response = await blogService.createBlog(newBlog);
-      setNotification(`a new blog ${title} by ${author} has been added`);
-      setBlogs([...blogs, { ...response, user: { name: user } }]);
-      console.log(response);
-    } catch (error) {
-      setError(error.message);
-      console.log('error', error.message);
-    }
+    createBlog(newBlog);
+    setShowForm(!showForm);
+    setTitle('');
+    setAuthor('');
+    setUrl('');
   };
 
   return (
     <>
       <div style={displayWhenFalse}>
         <br />
-        <button onClick={() => setShowForm(!showForm)}>Create New Blog</button>
+        <button
+          className='create-blog-button'
+          onClick={() => setShowForm(!showForm)}>
+          Create New Blog
+        </button>
       </div>
 
-      <form style={displayWhenTrue} onSubmit={handleSubmit}>
+      <form
+        style={displayWhenTrue}
+        onSubmit={(event) => handleSubmit(event, newBlog)}>
         <h1> Create new Blog </h1>
         <div>
           title:{' '}
-          <input type="text" value={title} onChange={({ target }) => setTitle(target.value)} />
+          <input
+            className='title'
+            type='text'
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
         </div>
         <div>
           author:{' '}
-          <input type="text" value={author} onChange={({ target }) => setAuthor(target.value)} />
+          <input
+            className='author'
+            type='text'
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
         </div>
         <div>
-          url: <input type="text" value={url} onChange={({ target }) => setUrl(target.value)} />
+          url:{' '}
+          <input
+            className='url'
+            type='text'
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
         </div>
-        <button type="submit">Create</button>{' '}
-        <button type="button" onClick={() => setShowForm(!showForm)}>
+        <button className='submit-button' type='submit'>
+          Create
+        </button>{' '}
+        <button type='button' onClick={() => setShowForm(!showForm)}>
           Cancel
         </button>
       </form>
@@ -62,11 +80,7 @@ function CreateNewBlogs({ setError, setNotification, blogs, setBlogs, user }) {
 }
 
 CreateNewBlogs.propTypes = {
-  setError: PropTypes.func.isRequired,
-  setNotification: PropTypes.func.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  user: PropTypes.string.isRequired,
-  blogs: PropTypes.array.isRequired,
+  createBlog: PropTypes.func.isRequired,
 };
 
 export default CreateNewBlogs;
