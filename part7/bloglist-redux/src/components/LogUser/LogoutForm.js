@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { logOutUser } from '../reduces/userReducer';
+import { logOutUser } from '../../reduces/userReducer';
 
 function LogoutForm() {
   const user = useSelector((data) => data.user);
@@ -16,12 +16,12 @@ function LogoutForm() {
 
   return (
     <>
-      {`${user.user} is logged in`}
-      <div>
+      {`${user.user} is logged in`}{' '}
+      <>
         <button id='logOut' onClick={clickHandle}>
           Log out
         </button>
-      </div>
+      </>
     </>
   );
 }

@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+}
+
+.appBar-container {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #dadada;
+  height: 60px;
+}
+
+.button {
+  display: inline-block;
+  padding: 0px 20px;
+  text-decoration: underline;
+  font-size: 26px;
+  color: black;
+  text-transform: uppercase;
+}
+
+.button:hover {
+}

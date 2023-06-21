@@ -13,6 +13,7 @@ const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
 const userLogin = require('./controllers/login');
 const testingRouter = require('./controllers/testing');
+const commentsRouter = require('./controllers/comments');
 
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body);
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(middleware.tokenExtractor);
 
 app.use('/api/blogs', middleware.userExtractor, blogsRouter);
+app.use('/api/comments', commentsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', userLogin);
 

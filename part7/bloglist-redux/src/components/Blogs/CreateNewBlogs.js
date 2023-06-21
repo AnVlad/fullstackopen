@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import blogService from '../../services/blogs';
+import { settingNotification } from '../../reduces/notificationReducer';
+import { addBlog } from '../../reduces/blogsReducer';
 
-function CreateNewBlogs({ createBlog }) {
+function CreateNewBlogs({ setError }) {
   const [showForm, setShowForm] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector((data) => data.user);
 
   const displayWhenTrue = { display: showForm ? '' : 'none' };
   const displayWhenFalse = { display: showForm ? 'none' : '' };
@@ -15,6 +20,7 @@ function CreateNewBlogs({ createBlog }) {
     title: title,
     author: author,
     url: url,
+    comments: [{ content: 'hello' }],
   };
 
   const handleSubmit = (event) => {
@@ -24,6 +30,30 @@ function CreateNewBlogs({ createBlog }) {
     setTitle('');
     setAuthor('');
     setUrl('');
+  };
+
+  const createBlog = async (newBlog) => {
+    try {
+      const response = await blogService.createBlog(newBlog);
+
+      dispatch(
+        settingNotification(
+          `a new blog ${newBlog.title} by ${newBlog.author} has been added`,
+          2000
+        )
+      );
+
+      dispatch(
+        addBlog({
+          ...response,
+          user: { name: user.user, username: user.username, id: user.id },
+        })
+      );
+      console.log(response);
+    } catch (error) {
+      setError(error.message);
+      console.log('error', error.message);
+    }
   };
 
   return (
@@ -78,9 +108,5 @@ function CreateNewBlogs({ createBlog }) {
     </>
   );
 }
-
-CreateNewBlogs.propTypes = {
-  createBlog: PropTypes.func.isRequired,
-};
 
 export default CreateNewBlogs;

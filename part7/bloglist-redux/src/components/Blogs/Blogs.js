@@ -1,5 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import style from './Blogs.module.css';
+
 import Blog from './Blog';
 
 function Blogs() {
@@ -12,7 +15,14 @@ function Blogs() {
       {blogs &&
         [...blogs]
           .sort((a, b) => b.likes - a.likes)
-          .map((blog) => <Blog key={blog.id} blog={blog} />)}
+          .map((blog) => (
+            <Link
+              className={style['blog-link-button']}
+              to={`/blog/${blog.id}`}
+              key={blog.id}>
+              <Blog blog={blog} />
+            </Link>
+          ))}
     </div>
   );
 }

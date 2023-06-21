@@ -1,28 +1,26 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+
+import { Container } from '@mui/material';
 
 import blogService from './services/blogs';
-import LoginForm from './components/LoginForm';
-import ErrorMessage from './components/ErrorMessage';
-import Notification from './components/Notification';
-import LoggedField from './components/LoggedField';
-
-import { useSelector } from 'react-redux';
-import { setBlogs } from './reduces/blogsReducer';
-import { setUser } from './reduces/userReducer';
 import usersService from './services/users';
+import { setBlogs } from './reduces/blogsReducer';
 import { setAllUsers } from './reduces/allUsersReducer';
-import Users from './components/Users';
-import { Route, Routes } from 'react-router-dom';
-import Blogs from './components/Blogs';
-import User from './components/User';
+import { setUser } from './reduces/userReducer';
+import Notification from './components/Notification';
+import Blogs from './components/Blogs/Blogs';
+import ErrorMessage from './components/ErrorMessage';
+import Users from './components/User/Users';
+import User from './components/User/User';
+import BlogPage from './components/Blogs/BlogPage';
+import AppBar from './AppBar/AppBar';
+import CreateNewBlogs from './components/Blogs/CreateNewBlogs';
 
 const App = () => {
   const dispatch = useDispatch();
-
   const user = useSelector((data) => data.user);
-  const allUsers = useSelector((data) => data.allUsers);
-  console.log('allUsers', allUsers);
 
   const [error, setError] = useState(null);
 
@@ -31,6 +29,7 @@ const App = () => {
   useEffect(() => {
     async function fetchBlogs() {
       const response = await blogService.getAllBlogs();
+      console.log('all blogs', response);
 
       dispatch(setBlogs(response));
     }
@@ -63,22 +62,18 @@ const App = () => {
   }, [updateList]);
 
   return (
-    <div>
-      {!user.user ? (
-        <LoginForm setUpdateList={setUpdateList} setError={setError} />
-      ) : (
-        <LoggedField setError={setError} />
-      )}
-
+    <Container>
+      <AppBar setUpdateList={setUpdateList} setError={setError} />
+      {user.user && <CreateNewBlogs setError={setError} />}
       {<ErrorMessage error={error} setError={setError} />}
       {<Notification />}
-
       <Routes>
         <Route path='/' element={<Blogs />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User />} />
+        <Route path='/blog/:id' element={<BlogPage />} />
       </Routes>
-    </div>
+    </Container>
   );
 };
 

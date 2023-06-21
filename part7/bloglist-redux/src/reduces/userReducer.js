@@ -13,7 +13,7 @@ const userReducer = createSlice({
     setUser(state, action) {
       return action.payload;
     },
-    logOutUser(state, action) {
+    logOutUser() {
       return initialState;
     },
   },

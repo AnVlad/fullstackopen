@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs';
+import blogService from '../../services/blogs';
 
 function LoginForm({ setUpdateList, setError }) {
   const [username, setUsername] = useState('');
