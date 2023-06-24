@@ -12,7 +12,9 @@ const App = () => {
     'The only way to go fast, is to go well.',
   ];
 
-  const [selected, setSelected] = useState((Math.random() * (anecdotes.length - 1)).toFixed(0));
+  const [selected, setSelected] = useState(
+    (Math.random() * (anecdotes.length - 1)).toFixed(0)
+  );
   const [points, setPoints] = useState(anecdotes.map(() => 0));
 
   let mostVoted = points.reduce((mostVotedValue, current) => {
@@ -31,7 +33,10 @@ const App = () => {
       <div>{anecdotes[selected]}</div>
       <div>has {points[selected]} votes</div>
 
-      <button onClick={() => setSelected((Math.random() * (anecdotes.length - 1)).toFixed(0))}>
+      <button
+        onClick={() =>
+          setSelected((Math.random() * (anecdotes.length - 1)).toFixed(0))
+        }>
         next anecdote
       </button>
       <button
