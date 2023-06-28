@@ -1,24 +1,40 @@
-import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries';
+import { useApolloClient, useMutation } from '@apollo/client';
 
-const NewBook = (props) => {
+const NewBook = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [published, setPublished] = useState('');
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
 
+  const client = useApolloClient();
+
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+
+    onError: (error) => console.log(error),
   });
 
   const submit = async (event) => {
     event.preventDefault();
 
     console.log({ title, author, published, genres });
-    const result = addBook({ variables: { title, author, published, genres } });
+
+    const result = await addBook({
+      variables: {
+        title: title,
+        author: author,
+        genres: genres,
+        published: published,
+      },
+    });
     console.log(result);
+
+    if (result.data) {
+      client.resetStore();
+    }
 
     setTitle('');
     setPublished('');

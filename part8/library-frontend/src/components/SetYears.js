@@ -20,10 +20,10 @@ function SetYears() {
     setOption(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(option, born);
-    const result = editBornData({
+    const result = await editBornData({
       variables: { name: option, setBornTo: born },
     });
     console.log(result);

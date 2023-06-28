@@ -136,6 +136,7 @@ const resolvers = {
 
       return book.save();
     },
+
     editAuthor: async (root, args, context) => {
       if (!context.currentUser.username) {
         throw new GraphQLError('you have to login before adding new books', {
@@ -149,6 +150,7 @@ const resolvers = {
 
       return author.save();
     },
+
     addAuthor: async (root, args) => {
       if (args.name.length < 2) {
         throw new GraphQLError('Name must be longer than 1 charter', {
@@ -169,6 +171,7 @@ const resolvers = {
     },
 
     login: async (root, args) => {
+      //to simplify the password is hardcoded
       if (args.password !== 'Secret') {
         throw new GraphQLError('Incorrect password', {
           extensions: {
